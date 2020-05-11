@@ -25,11 +25,16 @@ public class LocaleUtils {
     }
 
     public static String getDatePattern(Locale locale){
-        DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
-        return ((SimpleDateFormat) df).toLocalizedPattern()
-                .replaceAll(",", "")
-                .replaceAll("([a-zA-Z]+)", " $1")
-                .trim();
+        if (locale.getLanguage().equals("zh")) {
+            // zh date format got by native API is "y年M月d日EEEE" which breaks the parsing rules in the package
+            return "y年 M月 d日 EEEE";
+        } else {
+            DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+            return ((SimpleDateFormat) df).toLocalizedPattern()
+                    .replaceAll(",", "")
+                    .replaceAll("([a-zA-Z]+)", " $1")
+                    .trim();
+        }
     }
 
     static String getDateTimePattern(Locale locale){
